@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 5 288 170">
+  <defs>
+    <pattern id="engraving" width="5" height="5" patternUnits="userSpaceOnUse">
+      <path d="M-1 1l2-2M0 5l5-5M4 6l2-2" stroke="#173125" stroke-width="1"/>
+    </pattern>
+    <path id="quarter" d="M0-48v7" stroke="#173125" stroke-width="3"/>
+    <path id="five" d="M0-48v4.5" stroke="#173125" stroke-width="2"/>
+  </defs>
+  <!-- Cast-iron bracket and its scroll brace run into the edge of the banner. -->
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <path d="M110 13h227v9H110z M313 12h11v118h-11z" fill="#92ae77" stroke="#173125" stroke-width="3"/>
+    <path d="M120 15h212m-15 10v96" fill="none" stroke="#deefb4" stroke-width="2"/>
+    <path d="M170 23q86 0 142 85M236 23q54 6 77 46" fill="none" stroke="#a4bd8b" stroke-width="3"/>
+    <path d="M288 76c-20-27-42-37-54-32-10 5-6 18 3 17 7-1 8-9 3-11M305 93c-11-15-21-16-24-10-3 7 8 12 10 5" fill="none" stroke="#9ab182" stroke-width="2"/>
+    <path d="M104 20h18v8h-18z M109 28h8v12h-8z" fill="#b8ce99" stroke="#173125" stroke-width="2"/>
+  </g>
+  <!-- Asymmetric enamel case echoes the clipped lower corner of the brand tile. -->
+  <g stroke-linejoin="round">
+    <path d="M82 32h69q29 0 29 29v74q0 30-29 30H58l-8-7 6-96q0-30 26-30z" fill="#759467" stroke="#152d21" stroke-width="3"/>
+    <path d="M82 32h69q29 0 29 29v74q0 30-29 30H58l-8-7 6-96q0-30 26-30z" fill="url(#engraving)"/>
+    <path d="M78 31h64q29 0 29 29v71q0 28-28 28H54q-6 0-6-6V62q0-31 30-31z" fill="#cce795" stroke="#173125" stroke-width="3"/>
+    <circle cx="109" cy="95" r="57" fill="#a5bd7f" stroke="#173125" stroke-width="3"/>
+    <g transform="translate(109 95)">
+      <circle r="53" fill="#e3efbf" stroke="#173125" stroke-width="1.5"/>
+      <use href="#quarter"/><use href="#quarter" transform="rotate(90)"/><use href="#quarter" transform="rotate(180)"/><use href="#quarter" transform="rotate(270)"/>
+      <use href="#five" transform="rotate(30)"/><use href="#five" transform="rotate(60)"/><use href="#five" transform="rotate(120)"/><use href="#five" transform="rotate(150)"/><use href="#five" transform="rotate(210)"/><use href="#five" transform="rotate(240)"/><use href="#five" transform="rotate(300)"/><use href="#five" transform="rotate(330)"/>
+      <g font-family="Georgia,serif" font-size="12.5" font-weight="bold" fill="#263f2f" text-anchor="middle">
+        <text y="-31">12</text><text x="37" y="4">3</text><text y="40">6</text><text x="-37" y="4">9</text>
+      </g>
+      <path d="M0-26V0h22" fill="none" stroke="#173125" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle r="4" fill="#829966" stroke="#173125" stroke-width="2"/>
+    </g>
+    <g fill="#657d54"><circle cx="59" cy="148" r="2"/><circle cx="157" cy="46" r="2"/></g>
+  </g>
+</svg>
