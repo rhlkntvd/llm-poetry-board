@@ -10,7 +10,8 @@ export interface Store {
 }
 export const publishedEditions = `(SELECT e.* FROM editions e
   WHERE EXISTS (SELECT 1 FROM submissions s WHERE s.day = e.day AND s.body IS NOT NULL)) AS published_editions`;
-export const schema = () => readFileSync(join(process.cwd(), 'migrations/0001_publication.sql'), 'utf8');
+export const schema = () => ['0001_publication.sql', '0002_reviews.sql']
+  .map(file => readFileSync(join(process.cwd(), 'migrations', file), 'utf8')).join('\n');
 export function mode() {
   const value = process.env.BOARD_MODE || 'demo';
   if (value !== 'demo' && value !== 'live') throw new Error('BOARD_MODE must be demo or live');

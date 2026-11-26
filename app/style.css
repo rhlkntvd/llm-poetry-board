@@ -73,16 +73,22 @@ article h2 a:hover { text-decoration: underline; }
 .day-links a { background: #fff; border: 1px solid #c9d0c5; padding: .5rem .8rem; border-radius: .5rem; text-decoration: none; font-size: .85rem; font-weight: 600; }
 .day-links a:hover { background: #e7efdb; }
 .day-links a, .archive a { color: #21533c; }
-.archive { max-width: 50rem; }
-.archive h2 { font-size: 1.1rem; margin: 1.3rem 0 .45rem; }
-.archive ul { border: 1px solid #c9d0c5; border-radius: 4px; overflow: hidden; padding: 0; list-style: none; }
-.archive li + li { border-top: 1px solid #c9d0c5; }
-.archive a { display: grid; gap: .3rem; background: var(--paper); padding: .8rem 1rem; text-decoration: none; }
-.archive a:hover { background: #f7faef; }
+.ledger > h1 { font-size: clamp(1.8rem, 4vw, 2.65rem); margin-bottom: 1.15rem; }
+.archive section + section { margin-top: 2rem; }
+.archive h2 { display: flex; align-items: center; gap: .8rem; font: bold 1rem var(--typewriter); margin-bottom: .7rem; }
+.archive h2::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
+.archive ul { padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%, 23rem),1fr)); gap: .7rem; }
+.archive a { height: 100%; display: grid; grid-template-columns: 3.4rem 1fr auto; align-items: center; gap: .85rem; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 1rem; color: #244333; text-decoration: none; box-shadow: 2px 2px #cbc6b5; }
+.archive a:hover { border-color: #41664e; }
 .archive a:hover strong { text-decoration: underline; }
-.archive time { font-size: .85rem; color: #354239; }
-.summary { display: flex; gap: 1.8rem; padding: 1rem; width: fit-content; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; }
-.summary dd { margin: .35rem 0 0; font-size: 1.65rem; font-weight: 700; }
+.archive time { display: grid; place-items: center; background: #e8eddc; color: #234638; font: .8rem var(--typewriter); padding: .4rem; }
+.archive time b { font: bold 1.7rem Georgia,serif; }
+.edition-arrow { align-self: start; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%, 9rem),1fr)); gap: 1px; background: #496254; border: 1px solid #375543; border-radius: 4px; overflow: hidden; margin: 0 0 1.8rem; }
+.summary div { background: #234638; color: #f7faef; padding: .95rem 1rem; }
+.summary dt { font: .85rem var(--typewriter); }
+.summary dd { margin: .45rem 0 0; font: bold 2rem Georgia,serif; }
+.summary small { font: 1rem var(--typewriter); color: #d5e4cc; }
 @media (max-width: 44rem) {
 
   .brand { gap: .25rem 1rem; padding-block: .7rem .25rem; }
@@ -109,7 +115,25 @@ a:focus-visible { outline: 3px solid #467f54; outline-offset: 3px; }
 .post-dialog .votes { align-self: center; }
 .close-post { align-self: center; border: 0; border-radius: 50%; background: #edf2e7; color: #253c2b; min-width: 2.4rem; height: 2.4rem; font-size: 1.4rem; cursor: pointer; }
 .comments { border-top: 1px solid #d7dfd4; padding-top: 1rem; margin-top: 1.5rem; }
+.comments ul { list-style: none; padding: 0; margin: .75rem 0 0; display: grid; gap: .65rem; }
+.comments li { padding: .75rem .9rem; background: var(--paper); border: 1px solid var(--rule); border-left: 3px solid #74977c; border-radius: 3px; }
+.comments li strong { font: 700 .9rem/1.4 var(--typewriter); color: #293e32; }
+.comments li p { white-space: pre-wrap; line-height: 1.5; }
 .comments h3 { font-size: 1rem; }
 .comments p { margin-top: .35rem; color: #354239; }
 body:has(.post-dialog[open]) { overflow: hidden; }
 
+
+.rate-note { margin-block: .5rem 1rem; }
+.reaction-table { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; }
+.reaction-table table { width: 100%; border-collapse: collapse; background: var(--paper); }
+.reaction-table th, .reaction-table td { text-align: left; padding: .65rem .75rem; border-bottom: 1px solid var(--rule); }
+.reaction-table td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.reaction-table thead { background: #e1e7d8; color: #263f2f; font: bold .9rem var(--typewriter); }
+.reviewer-name { display: inline-flex; align-items: center; gap: .7rem; }
+.reaction-table tr:last-child td, .reaction-table tbody tr:last-child th { border-bottom: 0; }
+@media (max-width: 36rem) {
+  .reviewer-name .avatar { display: none; }
+  .reaction-table th, .reaction-table td { padding: .6rem .4rem; font-size: .85rem; }
+}

@@ -2,7 +2,9 @@
   "name": "llm-poetry-board",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
@@ -10,12 +12,20 @@
     "publish:day": "node --env-file-if-exists=.env.local scripts/publish.ts",
     "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.ts",
     "test": "node --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "review:day": "node --env-file-if-exists=.env.local scripts/review.ts"
   },
   "dependencies": {
-    "next": "16.4.5", "postgres": "3.4.9", "react": "19.3.1", "react-dom": "19.3.1", "zod": "3.25.76"
+    "next": "16.4.5",
+    "postgres": "3.4.9",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "3.25.76"
   },
   "devDependencies": {
-    "@types/node": "24.9.1", "@types/react": "19.3.0", "@types/react-dom": "19.3.0", "typescript": "5.9.3"
+    "@types/node": "24.9.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
   }
 }

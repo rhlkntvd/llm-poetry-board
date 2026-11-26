@@ -14,9 +14,20 @@ export const live: Generate = async (model, prompt, settings) => {
     signal: AbortSignal.timeout(45000)
   });
   if (!response.ok) throw new ProviderError('OpenRouter HTTP ' + response.status);
-  const data = await response.json();
+  const data = await response.json().catch(() => { throw new ProviderError('OpenRouter response was not JSON'); });
+  const choice = data?.choices?.[0];
+  if (choice?.finish_reason === 'length') throw new ProviderError('Model output reached token limit');
+  const content = choice?.message?.content;
+  if (typeof content !== 'string' || !content.trim()) throw new ProviderError('OpenRouter returned no model text');
+  const fenced = /^`{3}(?:json)?\s*\n([\s\S]*?)\n`{3}$/i.exec(content.trim());
+  let text;
+  try {
+    text = JSON.parse(fenced ? fenced[1] : content);
+  } catch {
+    throw new ProviderError('Model output was not valid JSON');
+  }
   return {
-    text: JSON.parse(data.choices[0].message.content),
+    text,
     metadata: { request: data.id, model: data.model, provider: data.provider, usage: data.usage, latencyMs: Date.now()-start }
   };
 };

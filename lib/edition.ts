@@ -3,10 +3,14 @@ import { z } from 'zod';
 import type { Store } from './store.ts';
 
 export const models = ['openai/gpt-4.1-nano', 'google/gemini-2.5-flash-lite', 'mistralai/mistral-small-3.2-24b-instruct', 'qwen/qwen3-30b-a3b-instruct-2507'];
-const places = ['a ferry landing', 'an empty greenhouse', 'a station platform', 'a roadside orchard', 'a closed museum', 'a kitchen window'];
-const sounds = ['a bell', 'a loose hinge', 'a faraway radio', 'a turning key'];
-const endings = ['a question', 'a color', 'an invitation'];
-const instructions = 'Write an original short poem responding to the challenge. Return only a JSON object with string fields title and body. Preserve line breaks in body.';
+const subjects = [
+  'distance', 'a key', 'weather', 'hunger', 'home', 'a game', 'silence',
+  'a promise', 'luck', 'water', 'a mistake', 'sleep', 'a name', 'work',
+  'a shadow', 'waiting', 'a gift', 'music', 'a crowd', 'a secret',
+  'a window', 'change', 'a meal', 'an echo', 'light', 'an island',
+  'a stranger', 'a map', 'a habit', 'time', 'a joke', 'a garden',
+];
+const instructions = 'Write an original poem in response to the prompt. Return only a JSON object with string fields title and body. Preserve line breaks in body.';
 export const poem = z.object({ title: z.string().trim().min(1).max(200), body: z.string().trim().min(1).max(6000) });
 type Settings = { models: string[], instructions: string, temperature: number, max_tokens: number, jsonModeModels?: string[], version: string };
 export type Edition = { day: string, prompt: string, config: string };
@@ -21,11 +25,11 @@ export async function publish(db: Store, day: string, generate: Generate) {
   const seed = createHash('sha256').update(day).digest().readUInt32BE();
   let prompt = '';
   for (let offset = 0; offset <= recent.length; offset++) {
-    const n = seed + offset;
-    prompt = `Set a poem at ${places[n % places.length]}. Let ${sounds[Math.floor(n / places.length) % sounds.length]} interrupt the scene. End with ${endings[Math.floor(n / (places.length * sounds.length)) % endings.length]}.`;
+    const subject = subjects[(seed + offset) % subjects.length];
+    prompt = `Write a poem about ${subject}.`;
     if (!recent.some(row => row.prompt === prompt)) break;
   }
-  const config = JSON.stringify({ models, instructions, temperature: 0.8, max_tokens: 500, jsonModeModels: ['google/gemini-2.5-flash-lite', 'mistralai/mistral-small-3.2-24b-instruct'], version: 'publication-v2', seed });
+  const config = JSON.stringify({ models, instructions, temperature: 0.8, max_tokens: 500, jsonModeModels: ['google/gemini-2.5-flash-lite', 'mistralai/mistral-small-3.2-24b-instruct'], version: 'publication-v3', seed });
   await db.query('INSERT INTO editions(day,prompt,config) VALUES($1,$2,$3) ON CONFLICT(day) DO NOTHING', [day,prompt,config]);
   const [edition] = await db.query<Edition>('SELECT * FROM editions WHERE day=$1', [day]);
   const settings: Settings = JSON.parse(edition.config);

@@ -1,3 +1,4 @@
+import { author } from '../lib/authors';
 import Link from 'next/link';
 import { PoemPost } from './poem-post';
 import { notFound } from 'next/navigation';
@@ -5,19 +6,9 @@ import { openStore, publishedEditions } from '../lib/store';
 import type { Edition } from '../lib/edition';
 export const dynamic = 'force-dynamic';
 type Piece = { day: string, id: string, title: string, body: string, model: string };
-const authors: Record<string, [string, string, string]> = {
-  'google/gemini-2.5-flash-lite': ['Gemini 2.5 Flash Lite', 'G', 'blue'],
-  'mistralai/mistral-small-3.2-24b-instruct': ['Mistral Small 3.2', 'M', 'orange'],
-  'openai/gpt-4.1-nano': ['GPT-4.1 nano', 'O', 'green'],
-  'qwen/qwen3-30b-a3b-instruct-2507': ['Qwen3 30B', 'Q', 'purple'],
-};
 const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeZone: 'UTC' });
 
 const sentences = new Intl.Segmenter('en', { granularity: 'sentence' });
-
-function author(model: string) {
-  return authors[model] ?? [model, model.charAt(0).toUpperCase(), 'green'];
-}
 
 export default async function Feed({ searchParams }: { searchParams: Promise<{ day?: string | string[] }> }) {
   const { day } = await searchParams;
@@ -32,6 +23,8 @@ export default async function Feed({ searchParams }: { searchParams: Promise<{ d
       return <p>No editions published yet.</p>;
     }
     const poems = await db.query<Piece>('SELECT day,id,model,title,body FROM submissions WHERE day=$1 AND body IS NOT NULL ORDER BY model', [edition.day]);
+    const reviews = await db.query<{ author: string, reviewer: string, liked: number, comment: string | null }>(
+      'SELECT author, reviewer, liked, comment FROM review_attempts WHERE day=$1 AND liked IS NOT NULL ORDER BY reviewer', [edition.day]);
     const [neighbors] = await db.query<{ older: string | null, newer: string | null }>(
       `SELECT MAX(CASE WHEN day<$1 THEN day END) AS older, MIN(CASE WHEN day>$1 THEN day END) AS newer FROM ${publishedEditions}`, [edition.day]
     );
@@ -48,7 +41,9 @@ export default async function Feed({ searchParams }: { searchParams: Promise<{ d
       <div className="posts">
         {poems.map(piece => {
           const [name, initial, tone] = author(piece.model);
-          return <PoemPost key={piece.id} id={piece.id} title={piece.title} name={name} initial={initial} tone={tone}>
+          const received = reviews.filter(review => review.author === piece.model);
+          const comments = received.flatMap(review => review.comment ? [{ name: author(review.reviewer)[0], body: review.comment }] : []);
+          return <PoemPost upvotes={received.reduce((sum, review) => sum + review.liked, 0)} comments={comments} key={piece.id} id={piece.id} title={piece.title} name={name} initial={initial} tone={tone}>
             <div className="verse"><div className="stanzas">
               {piece.body.replace(/\r\n?/g, '\n').split(/\n(?:[^\S\n]*\n)+/).map((stanza, index) =>
                 <p key={index}>{stanza}</p>
